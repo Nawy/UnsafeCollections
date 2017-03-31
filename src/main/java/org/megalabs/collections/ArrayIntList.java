@@ -4,6 +4,7 @@ import sun.misc.Unsafe;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 /**
  * Created by ermolaev on 4/1/17.
@@ -52,21 +53,32 @@ public class ArrayIntList extends UnsafeAllocator implements Closeable {
             unsafe.copyMemory(startPointer, newStartPointer, size*INT_SIZE_IN_BYTES);
             this.startPointer = newStartPointer;
         }
-        unsafe.putInt(index(size), value);
+        unsafe.putInt(calcIndex(size), value);
         size++;
     }
 
     public long get(long index) {
-        return unsafe.getInt(index(index));
+        if(index > size || index < 0) throw new NoSuchElementException("Array don't have element with index " + index);
+        return unsafe.getInt(calcIndex(index));
+    }
+
+    public void remove(long index) {
+        if(index > size || index < 0) throw new NoSuchElementException("Array don't have element with index " + index);
+        final long newStartPointer = unsafe.allocateMemory(capacity * INT_SIZE_IN_BYTES);
+        unsafe.copyMemory(startPointer, newStartPointer, index*INT_SIZE_IN_BYTES);
+        unsafe.copyMemory(calcIndex(index+1), newStartPointer+calcOffset(index), (size-index-1)*INT_SIZE_IN_BYTES);
+        this.startPointer = newStartPointer;
+        size--;
     }
 
     public long getSize() {
         return size;
     }
 
-    private long index(long offset) {
+    private long calcIndex(long offset) {
         return startPointer + offset*INT_SIZE_IN_BYTES;
     }
+    private long calcOffset(long index) { return index*INT_SIZE_IN_BYTES; }
 
     public void close() throws IOException {
         unsafe.freeMemory(startPointer);
