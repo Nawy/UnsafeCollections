@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.megalabs.collections.ArrayIntList;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -27,7 +28,7 @@ public class ArrayIntListTest {
 
     @Test
     public void test_increaseCapacity() throws IOException {
-        try(ArrayIntList testList = new ArrayIntList()) {
+        try(ArrayIntList testList = new ArrayIntList(2, 2)) {
             final int listSize = 100;
             final int mult = 10;
 
@@ -66,5 +67,4 @@ public class ArrayIntListTest {
             assertThat(testList.get(7)).isEqualTo(9);
         }
     }
-
 }
