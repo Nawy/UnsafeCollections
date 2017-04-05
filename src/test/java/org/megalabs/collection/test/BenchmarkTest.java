@@ -1,7 +1,7 @@
 package org.megalabs.collection.test;
 
 import org.junit.Test;
-import org.megalabs.collections.ArrayIntList;
+import org.megalabs.collections.IntList;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
@@ -55,11 +55,9 @@ public class BenchmarkTest {
     @Benchmark
     public void benchmarkUnsafeArayList(UnsafeArrayListInitialState state, Blackhole bh) {
 
-        ArrayIntList list = state.list;
+        IntList list = state.list;
 
         for (int i = 0; i < 1000; i++) bh.consume(list.get(i));
-        list.close();
-
     }
 
     // The JMH samples are the best documentation for how to use it
@@ -80,12 +78,12 @@ public class BenchmarkTest {
 
     @State(Scope.Thread)
     public static class UnsafeArrayListInitialState {
-        ArrayIntList list;
+        IntList list;
 
         @Setup(Level.Trial)
         public void initialize() {
             Random rand = new Random();
-            list = new ArrayIntList();
+            list = new IntList();
             for (int i = 0; i < 1000; i++) {
                 list.add(rand.nextInt());
             }

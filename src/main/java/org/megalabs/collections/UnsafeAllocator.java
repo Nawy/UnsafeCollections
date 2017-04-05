@@ -14,7 +14,7 @@ public abstract class UnsafeAllocator implements Closeable {
 
     protected Unsafe unsafe;
 
-    private long startPointer;
+    protected long startPointer;
 
     protected UnsafeAllocator() {
         this.unsafe = getUnsafe();

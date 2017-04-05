@@ -45,13 +45,7 @@ public class IntList extends UnsafeAllocator {
     public synchronized void add(int element) {
         if(size+1 > capacity) {
             this.capacity = capacity * multiplicator;
-            final long newStartPointer = unsafe.allocateMemory(capacity * INT_SIZE_IN_BYTES);
-            unsafe.copyMemory(
-                    getStartPointer(),
-                    newStartPointer,
-                    calcOffset(size)
-            );
-            setStartPointer(newStartPointer);
+            this.startPointer = unsafe.reallocateMemory(this.startPointer, capacity * INT_SIZE_IN_BYTES);
         }
         unsafe.putInt(calcIndex(size, getStartPointer()), element);
         size++;
