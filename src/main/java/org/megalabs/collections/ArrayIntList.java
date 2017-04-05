@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 /**
  * Created by ermolaev on 4/1/17.
  */
+//TODO Should implement List
 public class ArrayIntList extends UnsafeAllocator implements Closeable {
 
     /**
@@ -48,13 +49,14 @@ public class ArrayIntList extends UnsafeAllocator implements Closeable {
 
     /**
      * Added new elements to list
+     *
      * @param elem
      */
     public void add(int elem) {
-        if(size+1 > capacity) {
+        if (size + 1 > capacity) {
             this.capacity = capacity * multiplicator;
             final long newStartPointer = unsafe.allocateMemory(capacity * INT_SIZE_IN_BYTES);
-            unsafe.copyMemory(startPointer, newStartPointer, size*INT_SIZE_IN_BYTES);
+            unsafe.copyMemory(startPointer, newStartPointer, size * INT_SIZE_IN_BYTES);
             unsafe.freeMemory(startPointer);
             this.startPointer = newStartPointer;
         }
@@ -65,22 +67,24 @@ public class ArrayIntList extends UnsafeAllocator implements Closeable {
 
     /**
      * Get element from array by index
+     *
      * @param index
      */
     public long get(long index) {
-        if(index > size || index < 0) throw new NoSuchElementException("Array don't have element with index " + index);
+        if (index > size || index < 0) throw new NoSuchElementException("Array don't have element with index " + index);
         return unsafe.getInt(calcIndex(index));
     }
 
     /**
      * Remove element from array by index
+     *
      * @param index
      */
     public void remove(long index) {
-        if(index > size || index < 0) throw new NoSuchElementException("Array don't have element with index " + index);
+        if (index > size || index < 0) throw new NoSuchElementException("Array don't have element with index " + index);
         final long newStartPointer = unsafe.allocateMemory(capacity * INT_SIZE_IN_BYTES);
-        unsafe.copyMemory(startPointer, newStartPointer, index*INT_SIZE_IN_BYTES);
-        unsafe.copyMemory(calcIndex(index+1), newStartPointer+calcOffset(index), (size-index-1)*INT_SIZE_IN_BYTES);
+        unsafe.copyMemory(startPointer, newStartPointer, index * INT_SIZE_IN_BYTES);
+        unsafe.copyMemory(calcIndex(index + 1), newStartPointer + calcOffset(index), (size - index - 1) * INT_SIZE_IN_BYTES);
         this.startPointer = newStartPointer;
         size--;
     }
@@ -94,11 +98,14 @@ public class ArrayIntList extends UnsafeAllocator implements Closeable {
     }
 
     private long calcIndex(long offset) {
-        return startPointer + offset*INT_SIZE_IN_BYTES;
+        return startPointer + offset * INT_SIZE_IN_BYTES;
     }
-    private long calcOffset(long index) { return index*INT_SIZE_IN_BYTES; }
 
-    public void close() throws IOException {
+    private long calcOffset(long index) {
+        return index * INT_SIZE_IN_BYTES;
+    }
+
+    public void close() {
         unsafe.freeMemory(startPointer);
     }
 }

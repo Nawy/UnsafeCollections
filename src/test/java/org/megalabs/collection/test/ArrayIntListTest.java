@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.megalabs.collections.ArrayIntList;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -15,7 +14,7 @@ public class ArrayIntListTest {
 
     @Test
     public void test_addingAndGettingElements() throws IOException {
-        try(ArrayIntList testList = new ArrayIntList()) {
+        try (ArrayIntList testList = new ArrayIntList()) {
             testList.add(10);
             testList.add(24);
             testList.add(12345);
@@ -28,28 +27,28 @@ public class ArrayIntListTest {
 
     @Test
     public void test_increaseCapacity() throws IOException {
-        try(ArrayIntList testList = new ArrayIntList(2, 2)) {
+        try (ArrayIntList testList = new ArrayIntList(2, 2)) {
             final int listSize = 100;
             final int mult = 10;
 
             //fill
-            for(int i = 0; i < listSize; i++) {
-                testList.add(i*mult);
+            for (int i = 0; i < listSize; i++) {
+                testList.add(i * mult);
             }
             //test
             assertThat(testList.getSize()).isEqualTo(listSize);
-            for(int i = listSize-1; i >= 0; i--) {
-                assertThat(testList.get(i)).isEqualTo(i*mult);
+            for (int i = listSize - 1; i >= 0; i--) {
+                assertThat(testList.get(i)).isEqualTo(i * mult);
             }
         }
     }
 
     @Test
     public void test_removeElement() throws IOException {
-        try(ArrayIntList testList = new ArrayIntList()) {
+        try (ArrayIntList testList = new ArrayIntList()) {
             final int listSize = 10;
 
-            for(int i = 0; i < listSize; i++) {
+            for (int i = 0; i < listSize; i++) {
                 testList.add(i);
             }
 
@@ -68,3 +67,4 @@ public class ArrayIntListTest {
         }
     }
 }
+
