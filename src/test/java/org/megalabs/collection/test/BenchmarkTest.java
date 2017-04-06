@@ -28,7 +28,7 @@ public class BenchmarkTest {
                 .include(this.getClass().getName() + ".*")
                 // Set the following options as needed
                 .mode(Mode.AverageTime)
-                .timeUnit(TimeUnit.MICROSECONDS)
+                .timeUnit(TimeUnit.MILLISECONDS)
                 .warmupTime(TimeValue.seconds(1))
                 .warmupIterations(10)
                 .measurementTime(TimeValue.seconds(1))
@@ -49,7 +49,7 @@ public class BenchmarkTest {
 
         List<Integer> list = state.list;
 
-        for (int i = 0; i < 1000; i++) bh.consume(list.get(i));
+        for (int i = 0; i < 1_000_000; i++) bh.consume(list.get(i));
     }
 
     @Benchmark
@@ -57,7 +57,7 @@ public class BenchmarkTest {
 
         IntList list = state.list;
 
-        for (int i = 0; i < 1000; i++) bh.consume(list.get(i));
+        for (int i = 0; i < 1_000_000; i++) bh.consume(list.get(i));
     }
 
     // The JMH samples are the best documentation for how to use it
@@ -70,7 +70,7 @@ public class BenchmarkTest {
         public void initialize() {
             Random rand = new Random();
             list = new ArrayList<>();
-            for (int i = 0; i < 1000; i++) {
+            for (int i = 0; i < 1_000_000; i++) {
                 list.add(rand.nextInt());
             }
         }
@@ -84,9 +84,47 @@ public class BenchmarkTest {
         public void initialize() {
             Random rand = new Random();
             list = new IntList();
-            for (int i = 0; i < 1000; i++) {
+            for (int i = 0; i < 1_000_000; i++) {
                 list.add(rand.nextInt());
             }
+        }
+    }
+
+    @Benchmark
+    public void benchmarkArrayListInsert(ArrayListInitialStateInsert state) {
+
+        List<Integer> list = state.list;
+
+        for (int i = 0; i < 1_000; i++) list.add(0, i);
+    }
+
+    @Benchmark
+    public void benchmarkUnsafeArayListInsert(UnsafeArrayListInitialStateInsert state) {
+
+        IntList list = state.list;
+
+        for (int i = 0; i < 1_000; i++) list.insert(0, i);
+    }
+
+    // The JMH samples are the best documentation for how to use it
+    // http://hg.openjdk.java.net/code-tools/jmh/file/tip/jmh-samples/src/main/java/org/openjdk/jmh/samples/
+    @State(Scope.Thread)
+    public static class ArrayListInitialStateInsert {
+        List<Integer> list;
+
+        @Setup(Level.Trial)
+        public void initialize() {
+            list = new ArrayList<>();
+        }
+    }
+
+    @State(Scope.Thread)
+    public static class UnsafeArrayListInitialStateInsert {
+        IntList list;
+
+        @Setup(Level.Trial)
+        public void initialize() {
+            list = new IntList();
         }
     }
 }

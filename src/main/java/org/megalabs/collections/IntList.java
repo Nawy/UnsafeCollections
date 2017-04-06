@@ -42,7 +42,7 @@ public class IntList extends UnsafeAllocator {
      * Added new elements to list
      * @param element
      */
-    public synchronized void add(int element) {
+    public void add(int element) {
         if(size+1 > capacity) {
             this.capacity = capacity * multiplicator;
             this.startPointer = unsafe.reallocateMemory(this.startPointer, capacity * INT_SIZE_IN_BYTES);
@@ -55,7 +55,7 @@ public class IntList extends UnsafeAllocator {
      * Get element from array by index
      * @param index
      */
-    public synchronized long get(long index) {
+    public long get(long index) {
         if(index >= size || index < 0) throw new NoSuchElementException("Array don't have element with index " + index);
         return unsafe.getInt(calcIndex(index, getStartPointer()));
     }
@@ -64,7 +64,7 @@ public class IntList extends UnsafeAllocator {
      * Remove element from array by index
      * @param index
      */
-    public synchronized void remove(long index) {
+    public void remove(long index) {
         if(index >= size || index < 0) throw new NoSuchElementException("Array don't have element with index " + index);
         final long newStartPointer = unsafe.allocateMemory(capacity * INT_SIZE_IN_BYTES);
         unsafe.copyMemory(
@@ -86,8 +86,12 @@ public class IntList extends UnsafeAllocator {
      * @param index
      * @param element
      */
-    public synchronized void insert(final long index, final int element) {
-        if(index >= size || index < 0) throw new NoSuchElementException("Array don't have element with index " + index);
+    public void insert(final long index, final int element) {
+        if(index > size || index < 0) throw new NoSuchElementException("Array don't have element with index " + index);
+        if(index == size) {
+            this.add(element);
+            return;
+        }
         if(size == capacity) {
             this.capacity = capacity * multiplicator;
         }
@@ -112,7 +116,7 @@ public class IntList extends UnsafeAllocator {
         size++;
     }
 
-    public synchronized void normalize() {
+    public void normalize() {
         if(capacity == size) return;
 
         this.capacity = size;

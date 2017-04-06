@@ -46,7 +46,7 @@ public abstract class UnsafeAllocator implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         unsafe.freeMemory(getStartPointer());
     }
 }
