@@ -1,4 +1,4 @@
-package org.megalabs.collections;
+package org.megalabs.collection.unsafe;
 
 import java.util.NoSuchElementException;
 

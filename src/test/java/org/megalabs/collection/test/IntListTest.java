@@ -1,7 +1,7 @@
 package org.megalabs.collection.test;
 
 import org.junit.Test;
-import org.megalabs.collections.IntList;
+import org.megalabs.collection.unsafe.IntList;
 
 import java.io.IOException;
 

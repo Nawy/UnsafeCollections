@@ -1,7 +1,7 @@
 package org.megalabs.collection.test;
 
 import org.junit.Test;
-import org.megalabs.collections.IntList;
+import org.megalabs.collection.unsafe.IntList;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;

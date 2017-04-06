@@ -1,10 +1,9 @@
-package org.megalabs.collections;
+package org.megalabs.collection.unsafe;
 
 import org.megalabs.exception.CannotAllocateUnsafeException;
 import sun.misc.Unsafe;
 
 import java.io.Closeable;
-import java.io.IOException;
 import java.lang.reflect.Field;
 
 /**
