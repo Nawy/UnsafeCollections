@@ -143,7 +143,9 @@ public class AdvArrayList<T> implements AdvList<T>, RandomAccess, Serializable {
     private void growArray(int size) {
         if(size == capacity) {
             capacity *= scaleFactor;
-            array = Arrays.copyOf(array, capacity);
+            Object[] tmp = array;
+            array = new Object[capacity];
+            System.arraycopy(tmp, 0, array, 0, tmp.length);
         }
     }
 
@@ -206,10 +208,10 @@ public class AdvArrayList<T> implements AdvList<T>, RandomAccess, Serializable {
     @Override
     public int indexOf(Object o) {
         if(o == null) {
-            for (int i = 0; i < arraySize; i++)
+            for (int i = arraySize; --i >= 0;)
                 if (null == array[i]) return i;
         } else {
-            for (int i = 0; i < arraySize; i++)
+            for (int i = arraySize; --i >= 0;)
                 if (o.equals(array[i])) return i;
         }
         return -1;
