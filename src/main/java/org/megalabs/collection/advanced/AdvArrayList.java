@@ -1,5 +1,6 @@
 package org.megalabs.collection.advanced;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -9,7 +10,7 @@ import java.util.stream.Stream;
 /**
  * Created by ermolaev on 4/7/17.
  */
-public class AdvArrayList<T> implements AdvList<T> {
+public class AdvArrayList<T> implements AdvList<T>, RandomAccess, Serializable {
 
     private static final int DEFAULT_CAPACITY = 10;
     private static final int DEFAULT_SCALE_FACTOR = 2;
@@ -141,7 +142,7 @@ public class AdvArrayList<T> implements AdvList<T> {
 
     private void growArray(int size) {
         if(size == capacity) {
-            capacity = capacity * scaleFactor;
+            capacity *= scaleFactor;
             array = Arrays.copyOf(array, capacity);
         }
     }
@@ -206,10 +207,10 @@ public class AdvArrayList<T> implements AdvList<T> {
     public int indexOf(Object o) {
         if(o == null) {
             for (int i = 0; i < arraySize; i++)
-                if (array[i] == null) return i;
+                if (null == array[i]) return i;
         } else {
             for (int i = 0; i < arraySize; i++)
-                if (array[i].equals(o)) return i;
+                if (o.equals(array[i])) return i;
         }
         return -1;
     }

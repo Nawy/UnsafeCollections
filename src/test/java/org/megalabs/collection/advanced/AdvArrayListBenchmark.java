@@ -85,29 +85,32 @@ public class AdvArrayListBenchmark {
         }
     }
 
-//    @Benchmark
-//    public void benchmarkArrayListAdd(ArrayListInitialState state) {
-//        List<Integer> list = state.list;
-//
-//        for(int i = 0; i < 1_000_000; i++) {
-//            list.add(i);
-//        }
-//
-//        list.clear();
-//    }
-//
-//    @Benchmark
-//    public void benchmarkAdvArrayListAdd(AdvArrayListInitialState state) {
-//        AdvList<Integer> list = state.list;
-//
-//        for(int i = 0; i < 1_000_000; i++) {
-//            list.add(i);
-//        }
-//
-//        list.clear();
-//    }
+    @Benchmark
+    @Group("add_method")
+    public void benchmarkArrayListAdd(ArrayListInitialState state) {
+        List<Integer> list = state.list;
+
+        for(int i = 0; i < 1_000_000; i++) {
+            list.add(i);
+        }
+
+        list.clear();
+    }
 
     @Benchmark
+    @Group("add_method")
+    public void benchmarkAdvArrayListAdd(AdvArrayListInitialState state) {
+        AdvList<Integer> list = state.list;
+
+        for(int i = 0; i < 1_000_000; i++) {
+            list.add(i);
+        }
+
+        list.clear();
+    }
+
+    @Benchmark
+    @Group("contains_method")
     public void benchmarkArrayListContains(ArrayListInitialState state) {
         List<Integer> list = state.list;
 
@@ -117,6 +120,7 @@ public class AdvArrayListBenchmark {
     }
 
     @Benchmark
+    @Group("contains_method")
     public void benchmarkAdvArrayListContains(AdvArrayListInitialState state) {
         AdvList<Integer> list = state.list;
 
