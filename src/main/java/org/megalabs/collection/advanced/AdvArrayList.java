@@ -14,7 +14,7 @@ public class AdvArrayList<T> implements AdvList<T> {
     private static final int DEFAULT_CAPACITY = 10;
     private static final int DEFAULT_SCALE_FACTOR = 2;
 
-    private Object[] array;
+    private transient Object[] array;
     private int arraySize;
 
     private int capacity;
@@ -25,6 +25,10 @@ public class AdvArrayList<T> implements AdvList<T> {
     }
 
     public AdvArrayList(final int capacity, final int scaleFactor) {
+        init(capacity, scaleFactor);
+    }
+
+    private void init(final int capacity, final int scaleFactor) {
         this.array = new Object[capacity];
         this.arraySize = 0;
         this.capacity = capacity;
@@ -128,17 +132,17 @@ public class AdvArrayList<T> implements AdvList<T> {
 
     @Override
     public boolean add(Object element) {
-        growArray();
-        array[arraySize] = element;
-        arraySize++;
+        growArray(arraySize + 1);
+        array[arraySize-1] = element;
         return true;
     }
 
-    private void growArray() {
-        if(arraySize == capacity) {
+    private void growArray(final int size) {
+        if(size == capacity) {
             this.capacity *= scaleFactor;
             this.array = Arrays.copyOf(array, capacity);
         }
+        this.arraySize = size;
     }
 
     @Override
@@ -173,7 +177,7 @@ public class AdvArrayList<T> implements AdvList<T> {
 
     @Override
     public void clear() {
-
+        init(DEFAULT_CAPACITY, DEFAULT_SCALE_FACTOR);
     }
 
     @Override
