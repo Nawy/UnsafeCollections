@@ -61,24 +61,66 @@ public class AdvArrayListBenchmark {
         }
     }
 
+    @State(Scope.Thread)
+    public static class ArrayList10000InitialState {
+        List<Integer> list;
+
+        @Setup(Level.Trial)
+        public void initialize() {
+            list = new ArrayList<>();
+            for(int i = 0; i < 10_000; i++)
+                list.add(i);
+        }
+    }
+
+    @State(Scope.Thread)
+    public static class AdvArrayList10000InitialState {
+        AdvList<Integer> list;
+
+        @Setup(Level.Trial)
+        public void initialize() {
+            list = new AdvArrayList<>();
+            for(int i = 0; i < 10_000; i++)
+                list.add(i);
+        }
+    }
+
+//    @Benchmark
+//    public void benchmarkArrayListAdd(ArrayListInitialState state) {
+//        List<Integer> list = state.list;
+//
+//        for(int i = 0; i < 1_000_000; i++) {
+//            list.add(i);
+//        }
+//
+//        list.clear();
+//    }
+//
+//    @Benchmark
+//    public void benchmarkAdvArrayListAdd(AdvArrayListInitialState state) {
+//        AdvList<Integer> list = state.list;
+//
+//        for(int i = 0; i < 1_000_000; i++) {
+//            list.add(i);
+//        }
+//
+//        list.clear();
+//    }
+
     @Benchmark
-    public void benchmarkArrayListAdd(ArrayListInitialState state) {
+    public void benchmarkArrayListContains(ArrayListInitialState state) {
         List<Integer> list = state.list;
 
-        for(int i = 0; i < 1_000_000; i++) {
-            list.add(i);
-        }
+        list.contains(5000);
 
         list.clear();
     }
 
     @Benchmark
-    public void benchmarkAdvArrayListAdd(AdvArrayListInitialState state) {
+    public void benchmarkAdvArrayListContains(AdvArrayListInitialState state) {
         AdvList<Integer> list = state.list;
 
-        for(int i = 0; i < 1_000_000; i++) {
-            list.add(i);
-        }
+        list.contains(5000);
 
         list.clear();
     }

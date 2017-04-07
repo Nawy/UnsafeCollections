@@ -62,4 +62,33 @@ public class AdvArrayListTest {
         }
         assertThat(list.capacity()).isEqualTo(160);
     }
+
+    @Test
+    public void test_containsWithOne() {
+        AdvList<Integer> list = new AdvArrayList<>();
+        list.add(1);
+
+        assertThat(list.contains(1)).isTrue();
+        assertThat(list.contains(3)).isFalse();
+    }
+
+    @Test
+    public void test_containsWithThree() {
+        AdvList<Integer> list = new AdvArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+
+        assertThat(list.contains(1)).isTrue();
+        assertThat(list.contains(2)).isTrue();
+        assertThat(list.contains(3)).isTrue();
+        assertThat(list.contains(4)).isFalse();
+    }
+
+    @Test
+    public void test_containsWithZero() {
+        AdvList<Integer> list = new AdvArrayList<>();
+
+        assertThat(list.contains(4)).isFalse();
+    }
 }

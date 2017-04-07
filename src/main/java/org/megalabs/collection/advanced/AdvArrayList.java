@@ -15,7 +15,7 @@ public class AdvArrayList<T> implements AdvList<T> {
     private static final int DEFAULT_SCALE_FACTOR = 2;
 
     private transient Object[] array;
-    private int arraySize;
+    private transient int arraySize;
 
     private int capacity;
     private int scaleFactor;
@@ -67,7 +67,9 @@ public class AdvArrayList<T> implements AdvList<T> {
 
     @Override
     public void forEach(Consumer action) {
-
+        for(int i = 0; i < arraySize; i++) {
+            action.accept(array[i]);
+        }
     }
 
     @Override
@@ -87,7 +89,7 @@ public class AdvArrayList<T> implements AdvList<T> {
 
     @Override
     public String toString() {
-        return super.toString();
+        return Arrays.toString(array);
     }
 
     @Override
@@ -107,12 +109,12 @@ public class AdvArrayList<T> implements AdvList<T> {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return arraySize == 0;
     }
 
     @Override
     public boolean contains(Object o) {
-        return false;
+        return indexOf(o) != -1;
     }
 
     @Override
@@ -137,10 +139,10 @@ public class AdvArrayList<T> implements AdvList<T> {
         return true;
     }
 
-    private void growArray(final int size) {
+    private void growArray(int size) {
         if(size == capacity) {
-            this.capacity *= scaleFactor;
-            this.array = Arrays.copyOf(array, capacity);
+            capacity = capacity * scaleFactor;
+            array = Arrays.copyOf(array, capacity);
         }
     }
 
@@ -202,7 +204,14 @@ public class AdvArrayList<T> implements AdvList<T> {
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        if(o == null) {
+            for (int i = 0; i < arraySize; i++)
+                if (array[i] == null) return i;
+        } else {
+            for (int i = 0; i < arraySize; i++)
+                if (array[i].equals(o)) return i;
+        }
+        return -1;
     }
 
     @Override
