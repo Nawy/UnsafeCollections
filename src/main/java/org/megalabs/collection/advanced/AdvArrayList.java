@@ -133,7 +133,7 @@ public class AdvArrayList<T> implements AdvList<T> {
     @Override
     public boolean add(Object element) {
         growArray(arraySize + 1);
-        array[arraySize-1] = element;
+        array[arraySize++] = element;
         return true;
     }
 
@@ -142,7 +142,6 @@ public class AdvArrayList<T> implements AdvList<T> {
             this.capacity *= scaleFactor;
             this.array = Arrays.copyOf(array, capacity);
         }
-        this.arraySize = size;
     }
 
     @Override
