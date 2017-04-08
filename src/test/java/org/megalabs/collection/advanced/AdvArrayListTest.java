@@ -183,4 +183,20 @@ public class AdvArrayListTest {
         assertThat(list.get(2)).isEqualTo(4);
         assertThat(list.get(3)).isEqualTo(5);
     }
+
+    @Test
+    public void test_reverse() {
+        AdvList<Integer> list = new AdvArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+
+        list.reverse();
+
+        assertThat(list.get(0)).isEqualTo(4);
+        assertThat(list.get(1)).isEqualTo(3);
+        assertThat(list.get(2)).isEqualTo(2);
+        assertThat(list.get(3)).isEqualTo(1);
+    }
 }

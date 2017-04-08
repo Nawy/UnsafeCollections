@@ -8,7 +8,7 @@ import java.util.function.Predicate;
  */
 public interface AdvList<T> extends List<T> {
 
-    AdvList reverse();
+    void reverse();
     int capacity();
     boolean contains(Predicate<T> predicate);
     T last();

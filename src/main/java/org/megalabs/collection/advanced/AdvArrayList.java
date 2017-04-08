@@ -287,7 +287,7 @@ public class AdvArrayList<T> implements AdvList<T>, RandomAccess, Serializable {
     @Override
     public boolean contains(Predicate<T> predicate) {
         for(int i = arraySize; --i >= 0;) {
-            predicate.test((T)array[i]);
+            if(predicate.test((T)array[i])) return true;
         }
         return false;
     }
@@ -305,7 +305,12 @@ public class AdvArrayList<T> implements AdvList<T>, RandomAccess, Serializable {
     }
 
     @Override
-    public AdvList reverse() {
-        return null;
+    public void reverse() {
+        Object[] newArray = new Object[capacity];
+        int index = 0;
+        for(int i = arraySize; --i >= 0;) {
+            newArray[index++] = array[i];
+        }
+        array = newArray;
     }
 }
