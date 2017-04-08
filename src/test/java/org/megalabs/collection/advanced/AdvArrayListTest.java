@@ -91,4 +91,96 @@ public class AdvArrayListTest {
 
         assertThat(list.contains(4)).isFalse();
     }
+
+    @Test
+    public void test_insertWithManyElements() {
+        AdvList<Integer> list = new AdvArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+
+        final int value = 234;
+
+        list.add(3, value);
+
+        assertThat(list.get(3)).isEqualTo(value);
+    }
+
+    @Test
+    public void test_insertFirstWithManyElements() {
+        AdvList<Integer> list = new AdvArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+
+        final int value = 234;
+
+        list.add(0, value);
+
+        assertThat(list.first()).isEqualTo(value);
+    }
+
+    @Test
+    public void test_insertLastWithManyElements() {
+        AdvList<Integer> list = new AdvArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+
+        final int value = 234;
+
+        list.add(list.size(), value);
+
+        assertThat(list.last()).isEqualTo(value);
+    }
+
+    @Test
+    public void test_removeFirstElement() {
+        AdvList<Integer> list = new AdvArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+
+        list.remove(0);
+
+        assertThat(list.get(0)).isEqualTo(2);
+        assertThat(list.get(1)).isEqualTo(3);
+        assertThat(list.get(2)).isEqualTo(4);
+    }
+
+    @Test
+    public void test_removeLastElement() {
+        AdvList<Integer> list = new AdvArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+
+        list.remove(list.size()-1);
+
+        assertThat(list.get(0)).isEqualTo(1);
+        assertThat(list.get(1)).isEqualTo(2);
+        assertThat(list.get(2)).isEqualTo(3);
+    }
+
+    @Test
+    public void test_removeMiddleElement() {
+        AdvList<Integer> list = new AdvArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        list.add(4);
+        list.add(5);
+
+        list.remove(2);
+
+        assertThat(list.get(0)).isEqualTo(1);
+        assertThat(list.get(1)).isEqualTo(2);
+        assertThat(list.get(2)).isEqualTo(4);
+        assertThat(list.get(3)).isEqualTo(5);
+    }
 }

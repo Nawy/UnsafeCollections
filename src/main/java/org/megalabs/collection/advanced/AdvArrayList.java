@@ -3,6 +3,7 @@ package org.megalabs.collection.advanced;
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.ObjDoubleConsumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
@@ -90,17 +91,19 @@ public class AdvArrayList<T> implements AdvList<T>, RandomAccess, Serializable {
 
     @Override
     public String toString() {
-        return Arrays.toString(array);
+        StringBuilder builder = new StringBuilder(arraySize*3);
+        builder.append("[");
+        for(int i = -1; ++i < arraySize;) {
+            builder.append(array[i].toString());
+            if(i+1 < arraySize) builder.append(", ");
+        }
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-    }
-
-    @Override
-    public AdvList reverse() {
-        return null;
     }
 
     @Override
@@ -134,7 +137,7 @@ public class AdvArrayList<T> implements AdvList<T>, RandomAccess, Serializable {
     }
 
     @Override
-    public boolean add(Object element) {
+    public boolean add(T element) {
         growArray(arraySize + 1);
         array[arraySize++] = element;
         return true;
@@ -186,23 +189,51 @@ public class AdvArrayList<T> implements AdvList<T>, RandomAccess, Serializable {
 
     @Override
     public T get(int index) {
-        if(index >= arraySize || index < 0) throw new NoSuchElementException("with index " + index);
+        checkIndexBounds(index);
         return (T)array[index];
     }
 
     @Override
-    public T set(int index, Object element) {
-        return null;
+    public T set(int index, T element) {
+        checkIndexBounds(index);
+        Objects.requireNonNull(element);
+        Object tmp = array[index];
+        array[index] = element;
+        return (T)tmp;
     }
 
     @Override
-    public void add(int index, Object element) {
+    public void add(int index, T element) {
+        checkIndexBounds(index);
+        if(index == arraySize) { add(element); return;}
+        if(arraySize+1 == capacity) capacity *= scaleFactor;
 
+        Object[] tmp = new Object[capacity];
+        System.arraycopy(array, 0, tmp, 0, index);
+
+        Objects.requireNonNull(element);
+        tmp[index] = element;
+
+        System.arraycopy(array, index, tmp, index+1, arraySize-index);
+        this.array = tmp;
+        arraySize++;
     }
 
     @Override
     public T remove(int index) {
-        return null;
+        checkIndexBounds(index);
+        Object tmp = array[index];
+
+        Object[] newArray = new Object[capacity];
+        if(index != 0) {
+            System.arraycopy(array, 0, newArray, 0, index);
+        }
+        if(index != arraySize-1) {
+            System.arraycopy(array, index+1, newArray, index, arraySize - index);
+        }
+        array = newArray;
+        arraySize--;
+        return (T)tmp;
     }
 
     @Override
@@ -240,5 +271,41 @@ public class AdvArrayList<T> implements AdvList<T>, RandomAccess, Serializable {
     @Override
     public int capacity() {
         return this.capacity;
+    }
+
+    /*
+        Private functions
+     */
+    private void checkIndexBounds(int index) {
+        if(index > arraySize || index < 0) throw new NoSuchElementException("Index is wrong" + index);
+    }
+
+    /*
+        Help functions
+     */
+
+    @Override
+    public boolean contains(Predicate<T> predicate) {
+        for(int i = arraySize; --i >= 0;) {
+            predicate.test((T)array[i]);
+        }
+        return false;
+    }
+
+    @Override
+    public T last() {
+        if(isEmpty()) throw new NoSuchElementException("List is empty");
+        return (T)array[arraySize-1];
+    }
+
+    @Override
+    public T first() {
+        if(isEmpty()) throw new NoSuchElementException("List is empty");
+        return (T)array[0];
+    }
+
+    @Override
+    public AdvList reverse() {
+        return null;
     }
 }
